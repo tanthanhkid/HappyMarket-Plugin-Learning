@@ -1,0 +1,35 @@
+/**
+ * Admin Styles
+ */
+
+.hm-ad-item,
+.hm-product-item {
+	border: 1px solid #ddd;
+	padding: 15px;
+	margin-bottom: 15px;
+	background: #fff;
+}
+
+.hm-ad-item h4 {
+	margin-top: 0;
+}
+
+.hm-remove-ad,
+.hm-remove-product {
+	margin-top: 10px;
+}
+
+#hm-products-container {
+	margin-top: 15px;
+}
+
+#hm-selected-products .hm-product-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.hm-product-item button {
+	margin-left: 10px;
+}

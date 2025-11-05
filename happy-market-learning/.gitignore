@@ -1,0 +1,12 @@
+# WordPress
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Node modules (if any)
+node_modules/
+
+# Build files
+*.zip
+*.tar.gz
