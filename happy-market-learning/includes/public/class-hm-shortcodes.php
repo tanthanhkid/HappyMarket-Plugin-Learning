@@ -198,11 +198,11 @@ class HM_Shortcodes {
 
 		ob_start();
 		?>
-		<div class="hm-ads hm-ads-<?php echo esc_attr( $atts['position'] ); ?>">
+		<div class="hm-ads-container hm-ads-<?php echo esc_attr( $atts['position'] ); ?>">
 			<?php foreach ( $ads as $ad ) : ?>
-				<div class="hm-ad-item">
-					<a href="<?php echo esc_url( $ad['link_url'] ); ?>" target="_blank" rel="nofollow">
-						<img src="<?php echo esc_url( $ad['image_url'] ); ?>" alt="<?php echo esc_attr( $ad['alt_text'] ); ?>" />
+				<div class="hm-ad-item hm-ad-inline">
+					<a href="<?php echo esc_url( $ad['link_url'] ); ?>" target="_blank" rel="nofollow noopener" class="hm-ad-link">
+						<img src="<?php echo esc_url( $ad['image_url'] ); ?>" alt="<?php echo esc_attr( $ad['alt_text'] ); ?>" class="hm-ad-image" loading="lazy" />
 					</a>
 				</div>
 			<?php endforeach; ?>
@@ -256,7 +256,7 @@ class HM_Shortcodes {
 
 		ob_start();
 		?>
-		<div class="hm-products hm-products-<?php echo esc_attr( $atts['position'] ); ?>" style="display: grid; grid-template-columns: repeat(<?php echo esc_attr( $atts['columns'] ); ?>, 1fr); gap: 20px;">
+		<div class="hm-products hm-products-<?php echo esc_attr( $atts['position'] ); ?>" style="grid-template-columns: repeat(<?php echo esc_attr( $atts['columns'] ); ?>, 1fr);">
 			<?php
 			foreach ( $product_ids as $product_id ) {
 				$product = wc_get_product( $product_id );
@@ -265,17 +265,19 @@ class HM_Shortcodes {
 				}
 				?>
 				<div class="hm-product-item">
-					<a href="<?php echo esc_url( $product->get_permalink() ); ?>">
-						<?php echo $product->get_image(); ?>
-						<h3><?php echo esc_html( $product->get_name() ); ?></h3>
+					<a href="<?php echo esc_url( $product->get_permalink() ); ?>" class="hm-product-link">
+						<?php echo $product->get_image( 'woocommerce_thumbnail', array( 'class' => 'hm-product-image' ) ); ?>
+						<h3 class="hm-product-title"><?php echo esc_html( $product->get_name() ); ?></h3>
 					</a>
 					<?php if ( 'true' === $atts['show_price'] ) : ?>
 						<div class="hm-product-price"><?php echo $product->get_price_html(); ?></div>
 					<?php endif; ?>
 					<?php if ( 'true' === $atts['show_add_to_cart'] ) : ?>
-						<?php
-						echo do_shortcode( '[add_to_cart id="' . $product_id . '"]' );
-						?>
+						<div class="hm-product-add-to-cart">
+							<?php
+							echo do_shortcode( '[add_to_cart id="' . $product_id . '"]' );
+							?>
+						</div>
 					<?php endif; ?>
 				</div>
 				<?php
@@ -321,29 +323,41 @@ class HM_Shortcodes {
 
 		ob_start();
 		?>
-		<nav class="hm-lesson-navigation">
+		<div class="hm-lesson-navigation-inner">
 			<div class="hm-nav-prev">
 				<?php if ( $prev_lesson ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $prev_lesson->ID ) ); ?>">
-						&larr; <?php echo esc_html( $prev_lesson->post_title ); ?>
+					<a href="<?php echo esc_url( get_permalink( $prev_lesson->ID ) ); ?>" class="hm-nav-link hm-nav-link-prev">
+						<span class="hm-nav-icon">←</span>
+						<span class="hm-nav-text"><?php echo esc_html( $prev_lesson->post_title ); ?></span>
 					</a>
+				<?php else : ?>
+					<span class="hm-nav-link hm-nav-link-disabled">
+						<span class="hm-nav-icon">←</span>
+						<span class="hm-nav-text"><?php esc_html_e( 'First Lesson', 'happy-market-learning' ); ?></span>
+					</span>
 				<?php endif; ?>
 			</div>
 			<div class="hm-nav-series">
 				<?php if ( 'true' === $atts['show_series_link'] && $series ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $series->ID ) ); ?>">
+					<a href="<?php echo esc_url( get_permalink( $series->ID ) ); ?>" class="hm-nav-series-link">
 						<?php echo esc_html( $series->post_title ); ?>
 					</a>
 				<?php endif; ?>
 			</div>
 			<div class="hm-nav-next">
 				<?php if ( $next_lesson ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $next_lesson->ID ) ); ?>">
-						<?php echo esc_html( $next_lesson->post_title ); ?> &rarr;
+					<a href="<?php echo esc_url( get_permalink( $next_lesson->ID ) ); ?>" class="hm-nav-link hm-nav-link-next">
+						<span class="hm-nav-text"><?php echo esc_html( $next_lesson->post_title ); ?></span>
+						<span class="hm-nav-icon">→</span>
 					</a>
+				<?php else : ?>
+					<span class="hm-nav-link hm-nav-link-disabled">
+						<span class="hm-nav-text"><?php esc_html_e( 'Last Lesson', 'happy-market-learning' ); ?></span>
+						<span class="hm-nav-icon">→</span>
+					</span>
 				<?php endif; ?>
 			</div>
-		</nav>
+		</div>
 		<?php
 		return ob_get_clean();
 	}
